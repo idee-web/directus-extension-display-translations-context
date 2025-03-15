@@ -1,0 +1,65 @@
+{
+  "name": "directus-extension-display-languages",
+  "description": "An optimized display extension for multilingual content in Directus with advanced language selection and country mapping",
+  "icon": "translate",
+  "version": "1.0.0",
+  "keywords": [
+    "directus",
+    "directus-extension",
+    "directus-extension-display",
+    "language",
+    "multilingual",
+    "translation",
+    "country-mapping",
+    "i18n"
+  ],
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "directus:extension": {
+    "type": "display",
+    "path": "dist/index.js",
+    "source": "src/index.ts",
+    "host": "^11.5.1"
+  },
+  "scripts": {
+    "build": "directus-extension build",
+    "dev": "directus-extension build -w --no-minify",
+    "link": "directus-extension link"
+  },
+  "author": {
+    "name": "Alexandre Lapoux",
+    "email": "contact@idee-web.com",
+    "url": "https://www.idee-web.com"
+  },
+  "homepage": "https://github.com/idee-web/directus-extension-display-languages",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/idee-web/directus-extension-display-languages.git"
+  },
+  "bugs": {
+    "url": "https://github.com/idee-web/directus-extension-display-languages/issues"
+  },
+  "license": "MIT",
+  "copyright": "2025 IDEE-WEB",
+  "devDependencies": {
+    "@directus/extensions-sdk": "13.0.3",
+    "@directus/types": "11.0.1",
+    "@types/lodash": "^4.14.202",
+    "@types/node": "^18.16.0",
+    "sass": "^1.85.1",
+    "typescript": "^5.0.0",
+    "vue": "^3.3.4"
+  },
+  "dependencies": {
+    "@directus/composables": "11.1.8",
+    "@directus/extensions": "3.0.3",
+    "@directus/utils": "13.0.2",
+    "lodash": "^4.17.21"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "directus": ">=11.5.1"
+  }
+}
