@@ -1,73 +1,73 @@
-![Démonstration de l'extension](docs/screenshots/directus-extension-display-translations-context-table.png)
+![Demonstration of the extension](docs/screenshots/directus-extension-display-translations-context-table.png)
 
 # Directus Display Translations Context
 
-L'extension "Directus Translations Context Display" est une extension d'affichage optimisée pour le contenu multilingue dans Directus. Elle permet d'afficher automatiquement le contenu traduit dans l'interface d'administration de Directus en fonction de critères de sélection de langue avancés.
+The "Directus Translations Context Display" extension is a display extension optimized for multilingual content in Directus. It automatically displays translated content in the Directus admin interface based on advanced language selection criteria.
 
-Cette extension est particulièrement utile pour les projets multilingues où le contenu est traduit dans plusieurs langues et où vous souhaitez afficher automatiquement la traduction correspondant à un pays ou une langue spécifique en provenance d'une autre collection.
+This extension is particularly useful for multilingual projects where content is translated into multiple languages and you want to automatically display the translation corresponding to a specific country or language from another collection.
 
-![Extension installée](docs/screenshots/directus-extension-display-translations-context-extensions.png)
+![Installed extension](docs/screenshots/directus-extension-display-translations-context-extensions.png)
 
-## Table des matières
+## Table of Contents
 
-- [Fonctionnalités principales](#fonctionnalités-principales)
+- [Key Features](#key-features)
 - [Installation](#installation)
-  - [Étapes d'installation](#étapes-dinstallation)
-  - [Arborescence des dossiers](#arborescence-des-dossiers)
+  - [Installation Steps](#installation-steps)
+  - [Folder Structure](#folder-structure)
 - [Configuration](#configuration)
-  - [Options principales](#options-principales)
-- [Prérequis](#prérequis)
-  - [Collection Languages](#1-collection-languages)
-  - [Collection Countries](#2-collection-countries)
-  - [Votre collection exemple Pages](#4-collection-pages)
-  - [Votre collection exemple Pages_translations || Pages_Base](#3-collection-pages_base)
-  - [Directus setting translation](#5-collection-de-traductions)
-- [Schéma des relations](#schéma-des-relations)
-- [Utilisation](#utilisation)
-  - [Cas d'utilisation typique](#cas-dutilisation-typique)
-  - [Personnalisation de l'affichage](#personnalisation-de-laffichage)
-  - [Exemples de configuration](#exemples-de-configuration)
-- [Fonctionnement technique](#fonctionnement-technique)
+  - [Main Options](#main-options)
+- [Prerequisites](#prerequisites)
+  - [Languages Collection](#1-languages-collection)
+  - [Countries Collection](#2-countries-collection)
+  - [Your example Pages Collection](#4-pages-collection)
+  - [Your example Pages_translations || Pages_Base Collection](#3-pages_base-collection)
+  - [Directus setting translation](#5-translations-collection)
+- [Relationship Schema](#relationship-schema)
+- [Usage](#usage)
+  - [Typical Use Case](#typical-use-case)
+  - [Display Customization](#display-customization)
+  - [Configuration Examples](#configuration-examples)
+- [Technical Operation](#technical-operation)
   - [Architecture](#architecture)
 
-## Fonctionnalités principales
+## Key Features
 
-- **Affichage intelligent des traductions** : Affiche automatiquement la traduction correspondant à la langue sélectionnée
-- **Sélection de langue dynamique** : Permet de spécifier un chemin vers un champ de langue via une notation de type `collection.field.language_code_field`
-- **Mapping pays-langue configurable** : Conversion automatique des codes pays en codes de langue
-- **Menu de sélection de langue** : Interface utilisateur permettant de voir et sélectionner toutes les traductions disponibles
-- **Support des templates** : Personnalisation de l'affichage avec des templates incluant des variables et des traductions système
-- **Gestion des cas limites** : Mécanismes de fallback pour les traductions manquantes
+- **Intelligent translation display**: Automatically displays the translation corresponding to the selected language
+- **Dynamic language selection**: Allows specifying a path to a language field via a notation like `collection.field.language_code_field`
+- **Configurable country-language mapping**: Automatic conversion of country codes to language codes
+- **Language selection menu**: User interface for viewing and selecting all available translations
+- **Template support**: Customization of display with templates including variables and system translations
+- **Edge case management**: Fallback mechanisms for missing translations
 
 ## Installation
 
 ```bash
-# Dans le dossier de votre projet Directus
+# In your Directus project folder
 npm install -g @directus/cli
 cd extensions/directus-extension-display-translations-context
 npm install
 npm run build
 ```
 
-Ensuite, copiez le dossier `dist` dans le dossier `extensions/displays-translations-context` de votre installation Directus.
+Then, copy the `dist` folder to the `extensions/displays-translations-context` folder of your Directus installation.
 
-### Étapes d'installation
+### Installation Steps
 
-1. Créez la structure de dossiers suivante dans votre répertoire "extensions" :
+1. Create the following folder structure in your "extensions" directory:
 
 ```
-votre-projet-directus/
+your-directus-project/
 ├── extensions/
-│   │   └── display-translations-context/    # Nom du dossier de l'extension
-│   │       └── dist/                        # Nom du dossier de distribution
-│   │       │   └── index.js                 # Fichier compilé de l'extension
-│   │       └── package.json                 # Fichier json
-│   └── ... autres extensions
-└── ... autres fichiers Directus
+│   │   └── display-translations-context/    # Extension folder name
+│   │       └── dist/                        # Distribution folder name
+│   │       │   └── index.js                 # Compiled extension file
+│   │       └── package.json                 # JSON file
+│   └── ... other extensions
+└── ... other Directus files
 ```
 
-2. Copiez le fichier `dist/index.js` généré par le build dans le dossier `extensions/display-translations-context/dist/`
-3. Copiez également le fichier `package.json` dans le même dossier
+2. Copy the `dist/index.js` file generated by the build into the `extensions/display-translations-context/dist/` folder
+3. Also copy the `package.json` file to the same folder
 
 ### Docker Container / Coolify
 
@@ -82,179 +82,179 @@ services:
          - '/opt/directus/extensions/display-translations-context/package.json:/directus/extensions/display-translations-context/package.json:ro'
          - '/opt/directus/extensions/display-translations-context/dist/index.js:/directus/extensions/display-translations-context/dist/index.js:ro'
       environment:
-         - EXTENSIONS_AUTO_RELOAD=true # si Environnement de développement
+         - EXTENSIONS_AUTO_RELOAD=true # if Development environment
 ```
 
-1. Redémarrez votre conteneur Directus pour que l'extension soit détectée
+1. Restart your Directus container for the extension to be detected
 
-Cette structure est conforme à la façon dont Directus recherche les extensions dans un environnement Docker.
+This structure conforms to how Directus looks for extensions in a Docker environment.
 
-### Arborescence des dossiers
+### Folder Structure
 
-#### Environnement de développement
+#### Development Environment
 
-Environnement : EXTENSIONS_AUTO_RELOAD=true
+Environment: EXTENSIONS_AUTO_RELOAD=true
 
 ```
 directus-extension-display-translations-context/
-├── dist/                  # Dossier de build généré par le processus de build
-│   └── index.js           # Fichier compilé de l'extension
-├── src/                   # Code source
-│   ├── index.ts           # Point d'entrée de l'extension
-│   ├── translations-context.vue      # Composant Vue pour l'affichage des traductions
-│   └── shims.d.ts         # Déclarations TypeScript
-├── .gitignore             # Fichiers ignorés par Git
-├── package.json           # Configuration npm et dépendances
-├── README.md              # Documentation principale
-└── tsconfig.json          # Configuration TypeScript
+├── dist/                  # Build folder generated by the build process
+│   └── index.js           # Compiled extension file
+├── src/                   # Source code
+│   ├── index.ts           # Extension entry point
+│   ├── translations-context.vue      # Vue component for displaying translations
+│   └── shims.d.ts         # TypeScript declarations
+├── .gitignore             # Files ignored by Git
+├── package.json           # npm configuration and dependencies
+├── README.md              # Main documentation
+└── tsconfig.json          # TypeScript configuration
 ```
 
 ## Configuration
 
-Lors de la configuration de l'extension dans l'interface Directus, vous disposez des options suivantes :
+When configuring the extension in the Directus interface, you have the following options:
 
-![Interface de configuration complète](docs/screenshots/directus-extension-display-translations-context-parameters.png)
+![Complete configuration interface](docs/screenshots/directus-extension-display-translations-context-parameters.png)
 
-### Options principales
+### Main Options
 
 1. **Display Field (templateDTC)**
 
-   ![Option Display Field](docs/screenshots/directus-extension-display-translations-context-display-field.png)
+   ![Display Field Option](docs/screenshots/directus-extension-display-translations-context-display-field.png)
 
-   - Format d'affichage pour les traductions
-   - Supporte les variables de champ avec la syntaxe `{{field}}`
-   - Supporte les traductions système avec la syntaxe `[[SYSTEM_KEY]]`
-   - Exemple : `[[TABLE_TITLE]]: {{title}}`
+   - Display format for translations
+   - Supports field variables with the syntax `{{field}}`
+   - Supports system translations with the syntax `[[SYSTEM_KEY]]`
+   - Example: `[[TABLE_TITLE]]: {{title}}`
 
-   **Exemple avancé avec traductions système :**
+   **Advanced example with system translations:**
 
-   Vous pouvez utiliser la syntaxe `[[TABLE_TITLE]]→{{title}}` pour afficher le nom du champ traduit suivi du contenu :
+   You can use the syntax `[[TABLE_TITLE]]→{{title}}` to display the translated field name followed by the content:
 
-   ![Configuration avec traductions système](docs/screenshots/directus-extension-display-translations-context-system-translations-params.png)
+   ![Configuration with system translations](docs/screenshots/directus-extension-display-translations-context-system-translations-params.png)
 
-   Ce qui donne un résultat comme celui-ci dans l'interface :
+   Which gives a result like this in the interface:
 
-   ![Résultat avec traductions système](docs/screenshots/directus-extension-display-translations-context-system-translations.png)
+   ![Result with system translations](docs/screenshots/directus-extension-display-translations-context-system-translations.png)
 
-   Cette configuration affiche le nom du champ dans la langue correspondante (Title, Titre, Titolo, etc.) suivi du contenu traduit, créant ainsi une interface entièrement localisée.
+   This configuration displays the field name in the corresponding language (Title, Titre, Titolo, etc.) followed by the translated content, creating a fully localized interface.
 
 2. **Language Field (fieldDTC)**
 
-   ![Option Language Field](docs/screenshots/directus-extension-display-translations-context-languages-field.png)
+   ![Language Field Option](docs/screenshots/directus-extension-display-translations-context-languages-field.png)
 
-   - Champ contenant le code de langue dans la collection de traductions (ex: Pages_Base)
-   - Valeur par défaut : `language_code`
-   - Peut être un chemin imbriqué comme `languages_code.code`
+   - Field containing the language code in the translations collection (e.g., Pages_Base)
+   - Default value: `language_code`
+   - Can be a nested path like `languages_code.code`
 
-   **Fonctionnement technique**
+   **Technical Operation**
 
-   Cette option définit comment l'extension identifie le code de langue dans chaque élément de la collection de traductions (comme Pages_Base). Contrairement à ce qui pourrait être compris, ce champ ne fait référence qu'à la structure de la collection de traductions, et non à d'autres collections.
+   This option defines how the extension identifies the language code in each item of the translations collection (like Pages_Base). Unlike what might be understood, this field only refers to the structure of the translations collection, not to other collections.
 
-   Le code traite deux cas principaux :
+   The code handles two main cases:
 
-   1. **Champ direct** : Si vous spécifiez un nom de champ simple (ex: `language_code`), l'extension cherchera directement cette propriété dans l'objet de traduction.
+   1. **Direct field**: If you specify a simple field name (e.g., `language_code`), the extension will directly look for this property in the translation object.
 
       ```
-      // Élément de Pages_Base
+      // Pages_Base item
       {
         "id": 1,
-        "language_code": "fr-FR",  // ← Accès direct
+        "language_code": "fr-FR",  // ← Direct access
         "title": "Bonjour"
       }
       ```
 
-   2. **Chemin imbriqué** : Si vous spécifiez un chemin avec un point (ex: `languages_code.code`), l'extension suivra ce chemin pour trouver le code de langue :
+   2. **Nested path**: If you specify a path with a dot (e.g., `languages_code.code`), the extension will follow this path to find the language code:
 
       ```
-      // Élément de Pages_Base
+      // Pages_Base item
       {
         "id": 1,
-        "languages_code": {  // ← Premier niveau (relation M2O vers Languages)
-          "code": "fr-FR",   // ← Deuxième niveau
+        "languages_code": {  // ← First level (M2O relation to Languages)
+          "code": "fr-FR",   // ← Second level
           "name": "Français"
         },
         "title": "Bonjour"
       }
       ```
 
-   **Gestion intelligente des types**
+   **Intelligent Type Management**
 
-   L'extension gère intelligemment différents types de valeurs dans la collection de traductions :
+   The extension intelligently handles different types of values in the translations collection:
 
-   - Si le premier niveau est une chaîne de caractères, elle est utilisée directement comme code de langue
-   - Si le premier niveau est un objet (relation M2O), l'extension accède à la propriété spécifiée après le point
-   - Si aucune valeur n'est trouvée, l'extension utilise des mécanismes de secours pour éviter les erreurs
+   - If the first level is a string, it is used directly as a language code
+   - If the first level is an object (M2O relation), the extension accesses the property specified after the dot
+   - If no value is found, the extension uses fallback mechanisms to avoid errors
 
-   **Exemple concret avec Pages_Base**
+   **Concrete Example with Pages_Base**
 
-   Dans une structure où Pages_Base contient une relation M2O vers la collection Languages :
+   In a structure where Pages_Base contains an M2O relation to the Languages collection:
 
    ```
    fieldDTC: "languages_code.code"
    ```
 
-   Cela indique à l'extension de chercher d'abord l'objet `languages_code` dans chaque élément de Pages_Base, puis d'utiliser la propriété `code` de cet objet comme code de langue.
+   This tells the extension to first look for the `languages_code` object in each Pages_Base item, then use the `code` property of that object as the language code.
 
 3. **Default Language Selector (selectorDTC)**
 
-   ![Option Default Language Selector](docs/screenshots/directus-extension-display-translations-context-default-language-selector.png)
+   ![Default Language Selector Option](docs/screenshots/directus-extension-display-translations-context-default-language-selector.png)
 
-   - Sélecteur de langue statique ou dynamique
-   - Peut être un code de langue direct (ex: `fr-FR`)
-   - Ou un chemin dynamique (ex: `{{pages_id.country_code.defaultLanguage}}`)
+   - Static or dynamic language selector
+   - Can be a direct language code (e.g., `fr-FR`)
+   - Or a dynamic path (e.g., `{{pages_id.country_code.defaultLanguage}}`)
 
-   **Sélection flexible de la source de langue**
+   **Flexible Language Source Selection**
 
-   Cette option permet de définir d'où provient le code de langue à utiliser pour l'affichage. Elle offre une grande flexibilité :
+   This option allows you to define where the language code to use for display comes from. It offers great flexibility:
 
-   1. **Code statique** : Utilisez directement un code de langue (ex: `fr-FR`, `en-US`)
-   2. **Chemin dynamique** : Spécifiez un chemin vers n'importe quelle collection liée qui contient un code de langue
+   1. **Static code**: Directly use a language code (e.g., `fr-FR`, `en-US`)
+   2. **Dynamic path**: Specify a path to any linked collection that contains a language code
 
-   **Sources de langue possibles**
+   **Possible Language Sources**
 
-   Le sélecteur peut pointer vers différentes collections, pas uniquement la collection Countries :
+   The selector can point to different collections, not just the Countries collection:
 
-   - **Collection Countries** : `{{pages_id.country_code.defaultLanguage}}`
-   - **Collection Users** : `{{user_created.language_preference}}`
-   - **Collection Settings** : `{{site_settings.default_language}}`
-   - **Collection Regions** : `{{region_id.main_language}}`
-   - **Collection Organizations** : `{{organization_id.preferred_language}}`
+   - **Countries Collection**: `{{pages_id.country_code.defaultLanguage}}`
+   - **Users Collection**: `{{user_created.language_preference}}`
+   - **Settings Collection**: `{{site_settings.default_language}}`
+   - **Regions Collection**: `{{region_id.main_language}}`
+   - **Organizations Collection**: `{{organization_id.preferred_language}}`
 
-   **Format du chemin**
+   **Path Format**
 
-   Le format du chemin suit toujours la structure : `{{collection.field.language_field}}` où :
+   The path format always follows the structure: `{{collection.field.language_field}}` where:
 
-   - `collection` est le nom du champ de relation dans votre collection actuelle
-   - `field` est le champ dans la collection liée qui contient la référence à la langue
-   - `language_field` est le champ contenant le code de langue
+   - `collection` is the name of the relation field in your current collection
+   - `field` is the field in the linked collection that contains the reference to the language
+   - `language_field` is the field containing the language code
 
-   **Exemple concret**
+   **Concrete Example**
 
-   Si vous avez une collection `pages` avec une relation vers `organizations` qui a une préférence de langue :
+   If you have a `pages` collection with a relation to `organizations` that has a language preference:
 
    ```
    {{organization_id.settings.language_code}}
    ```
 
-   Cela indique à l'extension de chercher le code de langue dans le champ `language_code` du sous-objet `settings` de l'organisation liée à la page.
+   This tells the extension to look for the language code in the `language_code` field of the `settings` sub-object of the organization linked to the page.
 
 4. **Country to Language Mapping (mappingDTC)**
 
-   ![Option Country Mapping](docs/screenshots/directus-extension-display-translations-context-country-mapping.png)
+   ![Country Mapping Option](docs/screenshots/directus-extension-display-translations-context-country-mapping.png)
 
-   - Mapping JSON pour convertir les codes pays en codes de langue
-   - Utile lorsque le sélecteur renvoie un code pays au lieu d'un code de langue
-   - Exemple : `{"FR": "fr-FR", "DE": "de-DE", ...}`
+   - JSON mapping to convert country codes to language codes
+   - Useful when the selector returns a country code instead of a language code
+   - Example: `{"FR": "fr-FR", "DE": "de-DE", ...}`
 
-   **Mécanisme de secours et solution alternative**
+   **Fallback Mechanism and Alternative Solution**
 
-   Cette fonctionnalité sert de mécanisme de secours dans les situations suivantes :
+   This feature serves as a fallback mechanism in the following situations:
 
-   1. **Problèmes d'accès aux données** : Lorsque l'extension ne peut pas accéder directement à l'objet langue complet (par exemple, en raison de restrictions de permissions)
-   2. **Structure de données simplifiée** : Quand la relation pays-langue est stockée uniquement sous forme de code pays (chaîne de caractères) au lieu d'un objet complet
-   3. **Erreurs API** : Pour éviter les erreurs 403 lors de la tentative d'accès à des collections liées
+   1. **Data access issues**: When the extension cannot directly access the complete language object (for example, due to permission restrictions)
+   2. **Simplified data structure**: When the country-language relationship is stored only as a country code (string) instead of a complete object
+   3. **API errors**: To avoid 403 errors when attempting to access linked collections
 
-   **Exemple de configuration avancée**
+   **Advanced Configuration Example**
 
    ```json
    {
@@ -273,116 +273,116 @@ Lors de la configuration de l'extension dans l'interface Directus, vous disposez
    }
    ```
 
-   **Processus de résolution**
+   **Resolution Process**
 
-   L'extension suit un processus en plusieurs étapes pour déterminer le code de langue :
+   The extension follows a multi-step process to determine the language code:
 
-   1. Tente d'abord d'accéder directement au champ de langue via le chemin spécifié
-   2. Si cela échoue, utilise le mapping pays-langue configuré
-   3. Si le pays n'est pas dans le mapping, tente d'utiliser le code pays directement comme code de langue
-   4. En dernier recours, affiche un message d'erreur
+   1. First attempts to directly access the language field via the specified path
+   2. If that fails, uses the configured country-language mapping
+   3. If the country is not in the mapping, attempts to use the country code directly as a language code
+   4. As a last resort, displays an error message
 
-   **Cas d'utilisation typique**
+   **Typical Use Case**
 
-   Imaginons une structure où les pages sont liées à des pays, mais où l'accès direct à la relation pays-langue est limité :
+   Imagine a structure where pages are linked to countries, but where direct access to the country-language relationship is limited:
 
    ```
    Page → Country (code: "FR") → Language (code: "fr-FR")
    ```
 
-   Avec le mapping, l'extension peut convertir "FR" en "fr-FR" sans avoir besoin d'accéder directement à l'objet Language.
+   With the mapping, the extension can convert "FR" to "fr-FR" without needing to directly access the Language object.
 
 5. **Show Language Menu (menuDTC)**
 
-   ![Option Show Menu](docs/screenshots/directus-extension-display-translations-context-show-menu.png)
+   ![Show Menu Option](docs/screenshots/directus-extension-display-translations-context-show-menu.png)
 
-   - Active/désactive le menu de sélection de langue
-   - Permet aux utilisateurs de voir toutes les traductions disponibles
+   - Enables/disables the language selection menu
+   - Allows users to see all available translations
 
-## Prérequis
+## Prerequisites
 
-Pour utiliser pleinement cette extension, vous devez configurer les collections suivantes dans votre projet Directus :
+To fully use this extension, you need to configure the following collections in your Directus project:
 
-### 1. Collection Languages
+### 1. Languages Collection
 
-Cette collection stocke les langues disponibles dans votre système.
+This collection stores the languages available in your system.
 
-![Collection de langues](docs/screenshots/directus-extension-display-translations-context-language-collection.png)
+![Languages collection](docs/screenshots/directus-extension-display-translations-context-language-collection.png)
 
-**Champs recommandés :**
+**Recommended fields:**
 
-- `code` : Code de langue (ex: fr-FR, en-US) (input primary)
-- `name` : Nom de la langue (input)
-- `direction` : Direction d'écriture (select)
-- `active` : État d'activation (boolean)
+- `code`: Language code (e.g., fr-FR, en-US) (input primary)
+- `name`: Language name (input)
+- `direction`: Writing direction (select)
+- `active`: Activation status (boolean)
 
-![Champs de la collection languages](docs/screenshots/directus-extension-display-translations-context-languages-collection-fields.png)
+![Fields of the languages collection](docs/screenshots/directus-extension-display-translations-context-languages-collection-fields.png)
 
-### 2. Collection Countries
+### 2. Countries Collection
 
-Cette collection stocke les pays et leurs paramètres régionaux.
+This collection stores countries and their regional settings.
 
-![Collection de pays](docs/screenshots/directus-extension-display-translations-context-country-collection.png)
+![Countries collection](docs/screenshots/directus-extension-display-translations-context-country-collection.png)
 
-**Champs recommandés :**
+**Recommended fields:**
 
-- `code` : Code du pays (ex: FR, US) (input primary)
-- `name` : Nom du pays (input)
-- `defaultLanguage` : Relation vers la langue par défaut pour ce pays (m2o → Languages)
+- `code`: Country code (e.g., FR, US) (input primary)
+- `name`: Country name (input)
+- `defaultLanguage`: Relation to the default language for this country (m2o → Languages)
 
-![Champs de la collection countries](docs/screenshots/directus-extension-display-translations-context-countries-collection-fields.png)
+![Fields of the countries collection](docs/screenshots/directus-extension-display-translations-context-countries-collection-fields.png)
 
-### 3. Collection Pages_Base
+### 3. Pages Collection
 
-Cette collection sert de modèle pour les pages traduisibles.
+This collection contains pages with their translations.
 
-![Champs de la collection pages_base](docs/screenshots/directus-extension-display-translations-context-pages_base-collection-fields.png)
+![Pages collection](docs/screenshots/directus-extension-display-translations-context-pages-collection-fields.png)
 
-**Champs recommandés :**
+**Recommended fields:**
 
-- `id` : Identifiant unique (primary)
-- `pages_id` : Page parente (m2o → Pages)
-- `languages_code` : Langue (m2o → Languages)
-- `title` : Titre traduit (input)
-- `description` : Description traduite (textarea)
+- `id`: Unique identifier (primary)
+- `status`: Publication status (select)
+- `base`: Translations (translations → Pages_Base with extension Display-Translation-Context)
+- `country_code`: Associated country (m2o → Countries)
 
-### 4. Collection Pages
+### 4. Pages_Base Collection
 
-Cette collection contient les pages avec leurs traductions.
+This collection serves as a template for translatable pages.
 
-![Collection de pages](docs/screenshots/directus-extension-display-translations-context-pages-collection-fields.png)
+![Fields of the pages_base collection](docs/screenshots/directus-extension-display-translations-context-pages_base-collection-fields.png)
 
-**Champs recommandés :**
+**Recommended fields:**
 
-- `id` : Identifiant unique (primary)
-- `status` : État de publication (select)
-- `translations` : Traductions (translations → Pages_Base)
-- `country_code` : Pays associé (m2o → Countries)
+- `id`: Unique identifier (primary)
+- `pages_id`: Parent page (m2o → Pages)
+- `languages_code`: Language (m2o → Languages)
+- `title`: Translated title (input)
+- `description`: Translated description (textarea)
 
-### 5. Collection de traductions
+### 5. Translations Collection
 
-Cette collection stocke les traductions pour chaque élément traduisible.
+This collection stores translations for each translatable item.
 
-![Collection de traductions](docs/screenshots/directus-extension-display-translations-context-translations-collection.png)
+![Translations collection](docs/screenshots/directus-extension-display-translations-context-translations-collection.png)
 
-**Champs recommandés :**
+**Recommended fields:**
 
-## Schéma des relations
+## Relationship Schema
 
-Le diagramme suivant illustre les relations entre les différentes collections nécessaires pour le fonctionnement de l'extension :
+The following diagram illustrates the relationships between the different collections necessary for the extension to function:
 
 ```mermaid
 erDiagram
-    Languages ||--o{ Pages_Base : "traduit en"
-    Pages_Base }o--|| Pages : "appartient à"
-    Countries ||--o{ Pages : "associé à"
-    Countries ||--o{ Languages : "langue par défaut"
+    Languages ||--o{ Pages_Base : "translated in"
+    Pages_Base }o--|| Pages : "belongs to"
+    Countries ||--o{ Pages : "associated with"
+    Countries ||--o{ Languages : "default language"
 
     Languages {
         string code "fr-FR, en-US (input primary)"
         string name "Français, English (input)"
         string direction "LTR, RTL (select)"
-        boolean default "langue par défaut (boolean)"
+        boolean default "default language (boolean)"
     }
 
     Countries {
@@ -392,18 +392,18 @@ erDiagram
     }
 
     Pages {
-        string id "identifiant unique (input primary)"
-        string status "publié, brouillon (select)"
-        relation translations "traductions (translations → Pages_Base)"
-        relation country_code "pays associé (m2o → Countries)"
+        string id "unique identifier (input primary)"
+        string status "published, draft (select)"
+        relation base "translations (translations → Pages_Base with extension Display-Translation-Context)"
+        relation country_code "associated country (m2o → Countries)"
     }
 
     Pages_Base {
-        string id "identifiant unique (input primary)"
-        relation pages_id "page parente (m2o → Pages)"
-        relation languages_code "langue (m2o → Languages)"
-        string title "titre traduit (input)"
-        string description "description traduite (textarea)"
+        string id "unique identifier (input primary)"
+        relation pages_id "parent page (m2o → Pages)"
+        relation languages_code "language (m2o → Languages)"
+        string title "translated title (input)"
+        string description "translated description (textarea)"
     }
 
     SystemTranslations {
@@ -413,35 +413,35 @@ erDiagram
     }
 ```
 
-Ce schéma montre comment les collections sont interconnectées et les types de champs utilisés dans chaque collection. Les relations entre les collections sont essentielles pour le fonctionnement de l'extension, notamment pour la sélection dynamique de langue.
+This schema shows how the collections are interconnected and the types of fields used in each collection. The relationships between collections are essential for the extension to function, particularly for dynamic language selection.
 
-## Utilisation
+## Usage
 
-### Cas d'utilisation typique
+### Typical Use Case
 
-1. Créez une collection avec un champ de type "translations"
-2. Configurez l'affichage du champ pour utiliser l'extension "Translations Context"
-3. Définissez le template d'affichage (ex: `{{title}}`)
-4. Spécifiez le champ de langue (ex: `language_code`)
-5. Configurez le sélecteur de langue (ex: `{{pages_id.country_code.defaultLanguage}}`)
+1. Create a collection with a "translations" type field
+2. Configure the field display to use the "Translations Context" extension
+3. Define the display template (e.g., `{{title}}`)
+4. Specify the language field (e.g., `language_code`)
+5. Configure the language selector (e.g., `{{pages_id.country_code.defaultLanguage}}`)
 
-### Personnalisation de l'affichage
+### Display Customization
 
-Vous pouvez personnaliser l'affichage des colonnes dans l'interface Directus :
+You can customize the display of columns in the Directus interface:
 
-![Modification du nom de colonne base](docs/screenshots/directus-extension-display-translations-context-change-column-name.png)
+![Modifying the base column name](docs/screenshots/directus-extension-display-translations-context-change-column-name.png)
 
-Ce qui donne un résultat comme celui-ci :
+Which gives a result like this:
 
-![Modification du nom de colonne base en title](docs/screenshots/directus-extension-display-translations-context-change-column-name-base_to_title.png)
+![Modifying the base column name to title](docs/screenshots/directus-extension-display-translations-context-change-column-name-base_to_title.png)
 
-Les parametres a mettre sur le champs "base" de type translations:
+Parameters to set on the "base" field of translations type:
 
-![Nom de colonne personnalisé](docs/screenshots/directus-extension-display-translations-context-column-name.png)
+![Custom column name](docs/screenshots/directus-extension-display-translations-context-column-name.png)
 
-### Exemples de configuration
+### Configuration Examples
 
-#### Affichage simple avec langue statique
+#### Simple Display with Static Language
 
 ```
 Display Field: {{title}}
@@ -450,7 +450,7 @@ Default Language Selector: en-US
 Show Language Menu: true
 ```
 
-#### Affichage avancé avec sélection dynamique
+#### Advanced Display with Dynamic Selection
 
 ```
 Display Field: [[ITEM_TITLE]]: {{title}} ({{description}})
@@ -460,7 +460,7 @@ Country to Language Mapping: {"FR": "fr-FR", "DE": "de-DE", "US": "en-US"}
 Show Language Menu: true
 ```
 
-#### Affichage de prix de produits par pays
+#### Product Price Display by Country
 
 ```
 Display Field: {{price}} {{currency_symbol}}
@@ -470,70 +470,70 @@ Country to Language Mapping: {"FR": "EUR", "DE": "EUR", "US": "USD", "GB": "GBP"
 Show Language Menu: true
 ```
 
-Cette configuration permet d'afficher automatiquement le prix d'un produit dans la devise correspondant au marché cible du produit. Par exemple, si le produit a comme marché cible "US", l'extension affichera le prix en USD. Le mapping ici convertit les codes pays en codes de devise plutôt qu'en codes de langue.
+This configuration allows automatically displaying a product's price in the currency corresponding to the product's target market. For example, if the product has "US" as its target market, the extension will display the price in USD. The mapping here converts country codes to currency codes rather than language codes.
 
-## Fonctionnement technique
+## Technical Operation
 
 ### Architecture
 
-L'extension est composée de deux fichiers principaux :
+The extension consists of two main files:
 
-1. **index.ts** : Point d'entrée de l'extension qui définit :
+1. **index.ts**: Extension entry point that defines:
 
-   - Les métadonnées de l'extension (id, nom, description, icône)
-   - Le gestionnaire de rendu côté serveur
-   - Les options de configuration
-   - Les types de champs supportés
+   - Extension metadata (id, name, description, icon)
+   - Server-side rendering handler
+   - Configuration options
+   - Supported field types
 
-2. **translations-context.vue** : Composant Vue qui gère :
-   - L'affichage des traductions
-   - La logique de sélection de langue
-   - Le menu de sélection interactif
-   - La récupération des données via l'API Directus
+2. **translations-context.vue**: Vue component that manages:
+   - Translation display
+   - Language selection logic
+   - Interactive selection menu
+   - Data retrieval via the Directus API
 
-### Flux de données
+### Data Flow
 
-1. Directus passe les valeurs de traduction au gestionnaire de l'extension
-2. Le gestionnaire analyse les options et détermine si une sélection statique ou dynamique est nécessaire
-3. Pour les sélecteurs statiques, le gestionnaire filtre directement les traductions
-4. Pour les sélecteurs dynamiques, le composant Vue effectue des requêtes API pour résoudre le chemin
-5. Le composant affiche la traduction correspondante et génère le menu de sélection
+1. Directus passes translation values to the extension handler
+2. The handler analyzes the options and determines if static or dynamic selection is needed
+3. For static selectors, the handler directly filters translations
+4. For dynamic selectors, the Vue component makes API requests to resolve the path
+5. The component displays the corresponding translation and generates the selection menu
 
-### Optimisations
+### Optimizations
 
-- Minimisation des requêtes API en utilisant des requêtes combinées
-- Mise en cache des résultats pour éviter les requêtes répétées
-- Utilisation de computed properties pour optimiser les rendus
-- Gestion intelligente des cas limites et des erreurs
+- Minimization of API requests by using combined queries
+- Caching of results to avoid repeated queries
+- Use of computed properties to optimize renders
+- Intelligent handling of edge cases and errors
 
-## Compatibilité
+## Compatibility
 
-Cette extension a été testé avec Directus 11.5.1.
+This extension has been tested with Directus 11.5.1.
 
-## Dépannage
+## Troubleshooting
 
-### Problèmes courants
+### Common Issues
 
-1. **Traduction non affichée**
+1. **Translation not displayed**
 
-   - Vérifiez que le champ de langue est correctement configuré
-   - Assurez-vous que le sélecteur de langue pointe vers un champ valide
-   - Vérifiez que les traductions contiennent bien le code de langue attendu
+   - Check that the language field is correctly configured
+   - Make sure the language selector points to a valid field
+   - Verify that the translations contain the expected language code
 
-2. **Erreur de chargement**
+2. **Loading error**
 
-   - Vérifiez les permissions d'accès aux collections référencées
-   - Assurez-vous que les chemins de sélection sont correctement formatés
+   - Check access permissions to referenced collections
+   - Make sure selection paths are correctly formatted
 
-3. **Mapping pays-langue non fonctionnel**
+3. **Country-language mapping not working**
 
-   - Vérifiez que le JSON est correctement formaté
-   - Assurez-vous que les codes pays sont en majuscules
+   - Check that the JSON is correctly formatted
+   - Make sure country codes are in uppercase
 
 ## Conclusion
 
-L'extension "Directus Translations Context Display" offre une solution flexible et puissante pour gérer l'affichage des contenus multilingues dans Directus. Grâce à ses fonctionnalités avancées de sélection de langue et son interface utilisateur intuitive, elle simplifie considérablement la gestion des traductions dans les projets multilingues.
+The "Directus Translations Context Display" extension offers a flexible and powerful solution for managing the display of multilingual content in Directus. Thanks to its advanced language selection features and intuitive user interface, it significantly simplifies translation management in multilingual projects.
 
-## Licence
+## License
 
-Cette extension est distribuée sous licence MIT.
+This extension is distributed under the MIT license.

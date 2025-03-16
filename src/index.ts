@@ -135,7 +135,7 @@ export default defineDisplay({
           options: {
             placeholder: "languages_code",
           },
-          note: "Champ dans la collection de traductions contenant le code de langue. Peut être un chemin direct (ex: language_code) ou imbriqué (ex: languages_code.code) pour les relations M2O.",
+          note: "Field in the translations collection containing the language code. Can be a direct path (e.g., language_code) or nested (e.g., languages_code.code) for M2O relations.",
         },
       },
       {
@@ -147,7 +147,7 @@ export default defineDisplay({
           options: {
             placeholder: "fr-FR or {{pages_id.country_code.defaultLanguage}}",
           },
-          note: "Code de langue statique (ex: fr-FR) ou chemin dynamique vers n'importe quelle collection liée (ex: {{pages_id.country_code.defaultLanguage}}, {{user_created.language_preference}}, {{organization_id.settings.language_code}})",
+          note: "Static language code (e.g., fr-FR) or dynamic path to any linked collection (e.g., {{pages_id.country_code.defaultLanguage}}, {{user_created.language_preference}}, {{organization_id.settings.language_code}})",
         },
       },
       {
@@ -161,7 +161,7 @@ export default defineDisplay({
             language: "json",
             template: defaultMappingString,
           },
-          note: "Mécanisme de secours utilisé lorsqu'un code pays est trouvé au lieu d'un objet complet avec les informations de langue. Solution alternative en cas de problèmes d'accès aux données ou de restrictions de permissions.",
+          note: "Fallback mechanism used when a country code is found instead of a complete object with language information. Alternative solution in case of data access issues or permission restrictions.",
         },
         schema: {
           default_value: defaultMappingString,
