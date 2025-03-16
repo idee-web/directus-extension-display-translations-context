@@ -1,103 +1,33 @@
-# Directus Translations Context Display
+![Démonstration de l'extension](docs/screenshots/directus-extension-display-translations-context-table.png)
 
-Une extension d'affichage optimisée pour le contenu multilingue dans Directus.
+# Directus Display Translations Context
+
+L'extension "Directus Translations Context Display" est une extension d'affichage optimisée pour le contenu multilingue dans Directus. Elle permet d'afficher automatiquement le contenu traduit dans l'interface d'administration de Directus en fonction de critères de sélection de langue avancés.
+
+Cette extension est particulièrement utile pour les projets multilingues où le contenu est traduit dans plusieurs langues et où vous souhaitez afficher automatiquement la traduction correspondant à un pays ou une langue spécifique en provenance d'une autre collection.
 
 ![Extension installée](docs/screenshots/directus-extension-display-translations-context-extensions.png)
 
 ## Table des matières
 
-- [Introduction](#introduction)
 - [Fonctionnalités principales](#fonctionnalités-principales)
-- [Prérequis](#prérequis)
-  - [Collection Languages](#1-collection-languages)
-  - [Collection Countries](#2-collection-countries)
-  - [Collection Pages_Base](#3-collection-pages_base)
-  - [Collection Pages](#4-collection-pages)
-  - [Collection de traductions](#5-collection-de-traductions)
 - [Installation](#installation)
   - [Étapes d'installation](#étapes-dinstallation)
   - [Arborescence des dossiers](#arborescence-des-dossiers)
 - [Configuration](#configuration)
   - [Options principales](#options-principales)
+- [Prérequis](#prérequis)
+  - [Collection Languages](#1-collection-languages)
+  - [Collection Countries](#2-collection-countries)
+  - [Votre collection exemple Pages](#4-collection-pages)
+  - [Votre collection exemple Pages_translations || Pages_Base](#3-collection-pages_base)
+  - [Directus setting translation](#5-collection-de-traductions)
 - [Utilisation](#utilisation)
   - [Cas d'utilisation typique](#cas-dutilisation-typique)
   - [Personnalisation de l'affichage](#personnalisation-de-laffichage)
   - [Exemples de configuration](#exemples-de-configuration)
 - [Fonctionnement technique](#fonctionnement-technique)
   - [Architecture](#architecture)
-
-## Introduction
-
-L'extension "Directus Translations Context Display" est une extension d'affichage optimisée pour le contenu multilingue dans Directus. Elle permet d'afficher automatiquement le contenu traduit dans l'interface d'administration de Directus en fonction de critères de sélection de langue avancés.
-
-Cette extension est particulièrement utile pour les projets multilingues où le contenu est traduit dans plusieurs langues et où vous souhaitez afficher automatiquement la traduction correspondant à un pays ou une langue spécifique.
-
-![Démonstration de l'extension](docs/screenshots/directus-extension-display-translations-context-table.png)
-
-## Prérequis
-
-Pour utiliser pleinement cette extension, vous devez configurer les collections suivantes dans votre projet Directus :
-
-### 1. Collection Languages
-
-Cette collection stocke les langues disponibles dans votre système.
-
-![Collection de langues](docs/screenshots/directus-extension-display-translations-context-language-collection.png)
-
-**Champs recommandés :**
-
-- `code` : Code de langue (ex: fr-FR, en-US)
-- `name` : Nom de la langue
-- `active` : État d'activation
-
-![Champs de la collection languages](docs/screenshots/directus-extension-display-translations-context-languages-collection-fields.png)
-
-### 2. Collection Countries
-
-Cette collection stocke les pays et leurs paramètres régionaux.
-
-![Collection de pays](docs/screenshots/directus-extension-display-translations-context-country-collection.png)
-
-**Champs recommandés :**
-
-- `code` : Code du pays (ex: FR, US)
-- `name` : Nom du pays
-- `defaultLanguage` : Relation vers la langue par défaut pour ce pays
-
-![Champs de la collection countries](docs/screenshots/directus-extension-display-translations-context-countries-collection-fields.png)
-
-### 3. Collection Pages_Base
-
-Cette collection sert de modèle pour les pages traduisibles.
-
-![Champs de la collection pages_base](docs/screenshots/directus-extension-display-translations-context-pages_base-collection-fields.png)
-
-**Champs recommandés :**
-
-- `country_code` : Relation vers un pays
-- Autres champs spécifiques à votre contenu
-
-### 4. Collection Pages
-
-Cette collection contient les pages avec leurs traductions.
-
-![Collection de pages](docs/screenshots/directus-extension-display-translations-context-pages-collection-fields.png)
-
-**Champs recommandés :**
-
-- `translations` : Champ de type "translations" lié à la collection de traductions
-- Autres champs spécifiques à votre contenu
-
-### 5. Collection de traductions
-
-Cette collection stocke les traductions pour chaque élément traduisible.
-
-![Collection de traductions](docs/screenshots/directus-extension-display-translations-context-translations-collection.png)
-
-**Champs recommandés :**
-
-- `languages_code` : Relation vers une langue
-- `title`, `description`, etc. : Champs contenant le contenu traduit
 
 ## Fonctionnalités principales
 
@@ -218,6 +148,71 @@ Lors de la configuration de l'extension dans l'interface Directus, vous disposez
 
    - Active/désactive le menu de sélection de langue
    - Permet aux utilisateurs de voir toutes les traductions disponibles
+
+## Prérequis
+
+Pour utiliser pleinement cette extension, vous devez configurer les collections suivantes dans votre projet Directus :
+
+### 1. Collection Languages
+
+Cette collection stocke les langues disponibles dans votre système.
+
+![Collection de langues](docs/screenshots/directus-extension-display-translations-context-language-collection.png)
+
+**Champs recommandés :**
+
+- `code` : Code de langue (ex: fr-FR, en-US)
+- `name` : Nom de la langue
+- `active` : État d'activation
+
+![Champs de la collection languages](docs/screenshots/directus-extension-display-translations-context-languages-collection-fields.png)
+
+### 2. Collection Countries
+
+Cette collection stocke les pays et leurs paramètres régionaux.
+
+![Collection de pays](docs/screenshots/directus-extension-display-translations-context-country-collection.png)
+
+**Champs recommandés :**
+
+- `code` : Code du pays (ex: FR, US)
+- `name` : Nom du pays
+- `defaultLanguage` : Relation vers la langue par défaut pour ce pays
+
+![Champs de la collection countries](docs/screenshots/directus-extension-display-translations-context-countries-collection-fields.png)
+
+### 4. Collection Pages
+
+Cette collection contient les pages avec leurs traductions.
+
+![Collection de pages](docs/screenshots/directus-extension-display-translations-context-pages-collection-fields.png)
+
+**Champs recommandés :**
+
+- `translations` : Champ de type "translations" lié à la collection de traductions
+- Autres champs spécifiques à votre contenu
+
+### 3. Collection Pages_Base
+
+Cette collection sert de modèle pour les pages traduisibles.
+
+![Champs de la collection pages_base](docs/screenshots/directus-extension-display-translations-context-pages_base-collection-fields.png)
+
+**Champs recommandés :**
+
+- `country_code` : Relation vers un pays
+- Autres champs spécifiques à votre contenu
+
+### 5. Collection de traductions
+
+Cette collection stocke les traductions pour chaque élément traduisible.
+
+![Collection de traductions](docs/screenshots/directus-extension-display-translations-context-translations-collection.png)
+
+**Champs recommandés :**
+
+- `languages_code` : Relation vers une langue
+- `title`, `description`, etc. : Champs contenant le contenu traduit
 
 ## Utilisation
 
