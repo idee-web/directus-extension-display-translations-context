@@ -1,5 +1,5 @@
 <!--
-Language Display Component for Directus
+Translations Context Display Component for Directus
 This component handles the display and interaction of multilingual content.
 
 Features:
@@ -9,7 +9,6 @@ Features:
 - Support for nested language fields and country code mapping
 - Fallback mechanisms for missing translations
 
-@component
 @author Alexandre Lapoux <contact@idee-web.com>
 @copyright 2025 IDEE-WEB
 @license MIT
@@ -29,21 +28,21 @@ interface Props {
   field: string; // Field name
   type: string; // Field type
   value?: Record<string, any>[]; // Translation values
-  templateLang?: string; // Display template with field tokens
-  fieldLang?: string; // Language code field path
-  selectorLang?: string; // Language selector path or static code
-  mappingLang?: string; // Country to language code mapping
-  menuLang?: boolean; // Show/hide language selection menu
+  templateDTC?: string; // Display template with field tokens
+  fieldDTC?: string; // Language code field path
+  selectorDTC?: string; // Language selector path or static code
+  mappingDTC?: string; // Country to language code mapping
+  menuDTC?: boolean; // Show/hide language selection menu
 }
 
 // Default values for optional props
 const props = withDefaults(defineProps<Props>(), {
   value: () => [],
-  templateLang: undefined,
-  fieldLang: "language_code",
-  selectorLang: undefined,
-  mappingLang: undefined,
-  menuLang: true,
+  templateDTC: undefined,
+  fieldDTC: "language_code",
+  selectorDTC: undefined,
+  mappingDTC: undefined,
+  menuDTC: true,
 });
 
 // API client instance
@@ -66,7 +65,7 @@ const systemTranslations = ref<Record<string, Record<string, string>>>({});
  * Static selectors are direct language codes, while dynamic ones are paths to related fields
  */
 const isStaticSelector = computed(() => {
-  return props.selectorLang && !props.selectorLang.includes(".");
+  return props.selectorDTC && !props.selectorDTC.includes(".");
 });
 
 /**
@@ -74,10 +73,10 @@ const isStaticSelector = computed(() => {
  * Expected format: collection.field.language_code_field
  */
 const selectorInfo = computed(() => {
-  if (!props.selectorLang || isStaticSelector.value) return null;
+  if (!props.selectorDTC || isStaticSelector.value) return null;
 
   // Remove template markers if present
-  let selector = props.selectorLang;
+  let selector = props.selectorDTC;
   if (selector.startsWith("{{") && selector.endsWith("}}")) {
     selector = selector.slice(2, -2).trim();
   }
@@ -102,7 +101,7 @@ const selectorInfo = computed(() => {
 const staticLanguageCode = computed(() => {
   if (isStaticSelector.value) {
     // Remove {{ }} if present
-    let selector = props.selectorLang || "";
+    let selector = props.selectorDTC || "";
     if (selector.startsWith("{{") && selector.endsWith("}}")) {
       selector = selector.slice(2, -2).trim();
     }
@@ -118,7 +117,7 @@ const fetchAllData = async () => {
   targetLanguageCode.value = undefined;
 
   console.log("Starting fetchAllData");
-  console.log("Country selector:", props.selectorLang);
+  console.log("Country selector:", props.selectorDTC);
   console.log("Is static selector:", isStaticSelector.value);
 
   // If using a static selector, set it directly
@@ -153,6 +152,11 @@ const fetchAllData = async () => {
         processDataForDynamicSelector(props.value);
       }
 
+      // Check if we need to fetch system translations (only if template contains [[...]])
+      if (props.templateDTC && props.templateDTC.includes("[[")) {
+        await fetchSystemTranslations();
+      }
+
       return;
     }
 
@@ -167,7 +171,7 @@ const fetchAllData = async () => {
     let fields = ["*"]; // Start with all direct fields
 
     // If we have a dynamic selector, we need to fetch the related collections too
-    if (props.selectorLang && !isStaticSelector.value && selectorInfo.value) {
+    if (props.selectorDTC && !isStaticSelector.value && selectorInfo.value) {
       // Add the related collection fields
       fields.push(`${selectorInfo.value.relatedCollection}.*`);
       fields.push(
@@ -188,21 +192,68 @@ const fetchAllData = async () => {
       params: apiParams,
     });
 
-    const response = await api.get(apiUrl, { params: apiParams });
-    console.log("API Response for translations:", response);
+    // Determine if we need to fetch system translations
+    const needsSystemTranslations =
+      props.templateDTC && props.templateDTC.includes("[[");
 
-    if (response.data && response.data.data) {
-      translationItems.value = response.data.data;
+    // Prepare API requests
+    const requests = [api.get(apiUrl, { params: apiParams })];
+
+    // Add system translations request if needed
+    if (needsSystemTranslations) {
+      requests.push(
+        api.get("/translations", {
+          params: {
+            limit: -1, // Get all translations
+          },
+        })
+      );
+    }
+
+    // Execute all requests in parallel
+    const responses = await Promise.all(requests);
+
+    // Process translations response
+    const translationsResponse = responses[0];
+    if (translationsResponse.data && translationsResponse.data.data) {
+      translationItems.value = translationsResponse.data.data;
       dataFetched.value = true;
       console.log("Fetched translation items:", translationItems.value);
 
       // If using a dynamic selector, process the data to extract the language code
       if (!isStaticSelector.value && selectorInfo.value) {
-        processDataForDynamicSelector(response.data.data);
+        processDataForDynamicSelector(translationsResponse.data.data);
       }
     } else {
-      console.error("Invalid API response format for translations", response);
+      console.error(
+        "Invalid API response format for translations",
+        translationsResponse
+      );
       error.value = "Failed to fetch translation items";
+    }
+
+    // Process system translations response if it exists
+    if (needsSystemTranslations && responses.length > 1) {
+      const systemResponse = responses[1];
+      if (systemResponse.data && Array.isArray(systemResponse.data.data)) {
+        // Organize translations by key and language
+        const translations: Record<string, Record<string, string>> = {};
+
+        systemResponse.data.data.forEach((translation: any) => {
+          const key = translation.key;
+          const language = translation.language;
+          const value = translation.value;
+
+          if (!translations[key]) {
+            translations[key] = {};
+          }
+
+          translations[key][language] = value;
+        });
+
+        systemTranslations.value = translations;
+        console.log("System translations loaded:", systemTranslations.value);
+      }
     }
   } catch (err) {
     console.error("Error fetching data:", err);
@@ -313,9 +364,9 @@ const processDataForDynamicSelector = (data: Record<string, any>[]) => {
   // Try to parse the custom mapping if provided
   let countryToLanguageMap: Record<string, string> = defaultMapping;
 
-  if (props.mappingLang) {
+  if (props.mappingDTC) {
     try {
-      const customMapping = JSON.parse(props.mappingLang);
+      const customMapping = JSON.parse(props.mappingDTC);
       if (customMapping && typeof customMapping === "object") {
         // Merge with default mapping to ensure we have fallbacks
         countryToLanguageMap = { ...defaultMapping, ...customMapping };
@@ -362,7 +413,7 @@ const processDataForDynamicSelector = (data: Record<string, any>[]) => {
 
 // Watch for changes in the value or selector
 watch(
-  () => [props.value, props.selectorLang],
+  () => [props.value, props.selectorDTC],
   () => {
     // Reset the dataFetched flag when the value or selector changes
     dataFetched.value = false;
@@ -495,12 +546,12 @@ const displayItem = computed(() => {
   }
 
   console.log("All translation items:", translationItems.value);
-  console.log("Template field:", props.templateLang);
-  console.log("Language field:", props.fieldLang);
-  console.log("Country selector:", props.selectorLang);
+  console.log("Template field:", props.templateDTC);
+  console.log("Language field:", props.fieldDTC);
+  console.log("Country selector:", props.selectorDTC);
 
   // Parse the language field path
-  const langFieldPath = (props.fieldLang || "languages_code").split(".");
+  const langFieldPath = (props.fieldDTC || "languages_code").split(".");
   const primaryLangField = langFieldPath[0]; // e.g., "languages_code"
 
   // If we have a target language, use it
@@ -539,7 +590,7 @@ const displayItem = computed(() => {
 
         console.log(`Translation ${index}:`, {
           languageCode,
-          templateValue: getProperty(val, props.templateLang),
+          templateValue: getProperty(val, props.templateDTC),
           fullItem: val,
         });
       });
@@ -609,7 +660,7 @@ const translations = computed(() => {
     }
 
     // If translations are already objects, use them
-    const langFieldPath = (props.fieldLang || "languages_code").split(".");
+    const langFieldPath = (props.fieldDTC || "languages_code").split(".");
     const primaryLangField = langFieldPath[0]; // e.g., "languages_code"
 
     return props.value.map((item) => {
@@ -646,7 +697,7 @@ const translations = computed(() => {
   }
 
   // Parse the language field path
-  const langFieldPath = (props.fieldLang || "languages_code").split(".");
+  const langFieldPath = (props.fieldDTC || "languages_code").split(".");
   const primaryLangField = langFieldPath[0]; // e.g., "languages_code"
 
   return translationItems.value.map((item) => {
@@ -705,11 +756,11 @@ onMounted(() => {
   </div>
   <div v-else class="display-language">
     <!-- Main translation display -->
-    <div class="translation-value" :class="{ 'full-width': !menuLang }">
-      {{ renderTemplate(displayItem, templateLang) || displayItem.id || "-" }}
+    <div class="translation-value" :class="{ 'full-width': !menuDTC }">
+      {{ renderTemplate(displayItem, templateDTC) || displayItem.id || "-" }}
     </div>
     <!-- Language selection menu -->
-    <template v-if="menuLang">
+    <template v-if="menuDTC">
       <v-menu class="menu" show-arrow :disabled="value.length === 0">
         <template #activator="{ toggle, deactivate, active }">
           <v-icon
@@ -740,7 +791,7 @@ onMounted(() => {
               </div>
               <div class="translation-value">
                 {{
-                  renderTemplate(item.item, templateLang) || item.item.id || "-"
+                  renderTemplate(item.item, templateDTC) || item.item.id || "-"
                 }}
               </div>
             </v-list-item-content>

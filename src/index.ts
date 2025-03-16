@@ -1,5 +1,5 @@
 /**
- * Language Display Extension for Directus
+ * Translations Context Display Extension for Directus
  *
  * This extension provides an advanced display interface for multilingual content in Directus.
  * It supports both static and dynamic language selection, with features including:
@@ -16,16 +16,16 @@
  */
 
 import { defineDisplay } from "@directus/extensions";
-import languages from "./languages.vue";
+import translationsContext from "./translations-context.vue";
 
 export default defineDisplay({
-  id: "languages",
-  name: "Languages",
-  description: "Display languages based on other field selection",
+  id: "translations-context",
+  name: "Translations Context",
+  description: "Display translations based on context and language selection",
   icon: "translate",
-  component: languages,
+  component: translationsContext,
   handler: (values, options, { collection, field }) => {
-    console.log("Language Display handler called");
+    console.log("Translations Context Display handler called");
     console.log("Collection:", collection);
     console.log("Field:", field);
     console.log("Options:", options);
@@ -36,20 +36,20 @@ export default defineDisplay({
 
     // Clean up the language field path from template markers
     if (
-      cleanOptions.fieldLang &&
-      cleanOptions.fieldLang.startsWith("{{") &&
-      cleanOptions.fieldLang.endsWith("}}")
+      cleanOptions.fieldDTC &&
+      cleanOptions.fieldDTC.startsWith("{{") &&
+      cleanOptions.fieldDTC.endsWith("}}")
     ) {
-      cleanOptions.fieldLang = cleanOptions.fieldLang.slice(2, -2).trim();
+      cleanOptions.fieldDTC = cleanOptions.fieldDTC.slice(2, -2).trim();
     }
 
     // Clean up the selector path from template markers
     if (
-      cleanOptions.selectorLang &&
-      cleanOptions.selectorLang.startsWith("{{") &&
-      cleanOptions.selectorLang.endsWith("}}")
+      cleanOptions.selectorDTC &&
+      cleanOptions.selectorDTC.startsWith("{{") &&
+      cleanOptions.selectorDTC.endsWith("}}")
     ) {
-      cleanOptions.selectorLang = cleanOptions.selectorLang.slice(2, -2).trim();
+      cleanOptions.selectorDTC = cleanOptions.selectorDTC.slice(2, -2).trim();
     }
 
     // Validate required inputs
@@ -64,12 +64,12 @@ export default defineDisplay({
     }
 
     // Handle static language selector (direct language code)
-    if (cleanOptions.selectorLang && !cleanOptions.selectorLang.includes(".")) {
-      const staticLanguageCode = cleanOptions.selectorLang.trim();
+    if (cleanOptions.selectorDTC && !cleanOptions.selectorDTC.includes(".")) {
+      const staticLanguageCode = cleanOptions.selectorDTC.trim();
       console.log("Using static language code:", staticLanguageCode);
 
       // Find translation matching the static language code
-      const langField = cleanOptions.fieldLang || "language_code";
+      const langField = cleanOptions.fieldDTC || "language_code";
       console.log("Language field:", langField);
 
       const matchedItem = values.find((item) => {
@@ -107,7 +107,7 @@ export default defineDisplay({
     // Configuration options for the display
     return [
       {
-        field: "templateLang",
+        field: "templateDTC",
         name: "Display Field",
         meta: {
           interface: "input",
@@ -127,7 +127,7 @@ export default defineDisplay({
         },
       },
       {
-        field: "fieldLang",
+        field: "fieldDTC",
         name: "Language Field",
         meta: {
           interface: "input",
@@ -139,7 +139,7 @@ export default defineDisplay({
         },
       },
       {
-        field: "selectorLang",
+        field: "selectorDTC",
         name: "Default Language Selector",
         meta: {
           interface: "input",
@@ -151,7 +151,7 @@ export default defineDisplay({
         },
       },
       {
-        field: "mappingLang",
+        field: "mappingDTC",
         name: "Country to Language Mapping",
         type: "json",
         meta: {
@@ -168,7 +168,7 @@ export default defineDisplay({
         },
       },
       {
-        field: "menuLang",
+        field: "menuDTC",
         name: "Show Language Menu",
         type: "boolean",
         schema: {
