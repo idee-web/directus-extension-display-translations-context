@@ -311,9 +311,10 @@ Cette collection stocke les langues disponibles dans votre système.
 
 **Champs recommandés :**
 
-- `code` : Code de langue (ex: fr-FR, en-US)
-- `name` : Nom de la langue
-- `active` : État d'activation
+- `code` : Code de langue (ex: fr-FR, en-US) (input primary)
+- `name` : Nom de la langue (input)
+- `direction` : Direction d'écriture (select)
+- `active` : État d'activation (boolean)
 
 ![Champs de la collection languages](docs/screenshots/directus-extension-display-translations-context-languages-collection-fields.png)
 
@@ -325,22 +326,11 @@ Cette collection stocke les pays et leurs paramètres régionaux.
 
 **Champs recommandés :**
 
-- `code` : Code du pays (ex: FR, US)
-- `name` : Nom du pays
-- `defaultLanguage` : Relation vers la langue par défaut pour ce pays
+- `code` : Code du pays (ex: FR, US) (input primary)
+- `name` : Nom du pays (input)
+- `defaultLanguage` : Relation vers la langue par défaut pour ce pays (m2o → Languages)
 
 ![Champs de la collection countries](docs/screenshots/directus-extension-display-translations-context-countries-collection-fields.png)
-
-### 4. Collection Pages
-
-Cette collection contient les pages avec leurs traductions.
-
-![Collection de pages](docs/screenshots/directus-extension-display-translations-context-pages-collection-fields.png)
-
-**Champs recommandés :**
-
-- `translations` : Champ de type "translations" lié à la collection de traductions
-- Autres champs spécifiques à votre contenu
 
 ### 3. Collection Pages_Base
 
@@ -350,8 +340,24 @@ Cette collection sert de modèle pour les pages traduisibles.
 
 **Champs recommandés :**
 
-- `country_code` : Relation vers un pays
-- Autres champs spécifiques à votre contenu
+- `id` : Identifiant unique (primary)
+- `pages_id` : Page parente (m2o → Pages)
+- `languages_code` : Langue (m2o → Languages)
+- `title` : Titre traduit (input)
+- `description` : Description traduite (textarea)
+
+### 4. Collection Pages
+
+Cette collection contient les pages avec leurs traductions.
+
+![Collection de pages](docs/screenshots/directus-extension-display-translations-context-pages-collection-fields.png)
+
+**Champs recommandés :**
+
+- `id` : Identifiant unique (primary)
+- `status` : État de publication (select)
+- `translations` : Traductions (translations → Pages_Base)
+- `country_code` : Pays associé (m2o → Countries)
 
 ### 5. Collection de traductions
 
@@ -360,9 +366,6 @@ Cette collection stocke les traductions pour chaque élément traduisible.
 ![Collection de traductions](docs/screenshots/directus-extension-display-translations-context-translations-collection.png)
 
 **Champs recommandés :**
-
-- `languages_code` : Relation vers une langue
-- `title`, `description`, etc. : Champs contenant le contenu traduit
 
 ## Schéma des relations
 
