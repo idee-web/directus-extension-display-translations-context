@@ -4,6 +4,28 @@ Une extension d'affichage optimisée pour le contenu multilingue dans Directus.
 
 ![Extension installée](docs/screenshots/directus-extension-display-translations-context-extensions.png)
 
+## Table des matières
+
+- [Introduction](#introduction)
+- [Fonctionnalités principales](#fonctionnalités-principales)
+- [Prérequis](#prérequis)
+  - [Collection Languages](#1-collection-languages)
+  - [Collection Countries](#2-collection-countries)
+  - [Collection Pages_Base](#3-collection-pages_base)
+  - [Collection Pages](#4-collection-pages)
+  - [Collection de traductions](#5-collection-de-traductions)
+- [Installation](#installation)
+  - [Étapes d'installation](#étapes-dinstallation)
+  - [Arborescence des dossiers](#arborescence-des-dossiers)
+- [Configuration](#configuration)
+  - [Options principales](#options-principales)
+- [Utilisation](#utilisation)
+  - [Cas d'utilisation typique](#cas-dutilisation-typique)
+  - [Personnalisation de l'affichage](#personnalisation-de-laffichage)
+  - [Exemples de configuration](#exemples-de-configuration)
+- [Fonctionnement technique](#fonctionnement-technique)
+  - [Architecture](#architecture)
+
 ## Introduction
 
 L'extension "Directus Translations Context Display" est une extension d'affichage optimisée pour le contenu multilingue dans Directus. Elle permet d'afficher automatiquement le contenu traduit dans l'interface d'administration de Directus en fonction de critères de sélection de langue avancés.
