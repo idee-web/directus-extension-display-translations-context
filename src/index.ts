@@ -147,7 +147,7 @@ export default defineDisplay({
           options: {
             placeholder: "fr-FR or {{pages_id.country_code.defaultLanguage}}",
           },
-          note: "Static language code (e.g., fr-FR) or dynamic path (e.g., {{pages_id.country_code.defaultLanguage}})",
+          note: "Code de langue statique (ex: fr-FR) ou chemin dynamique vers n'importe quelle collection liée (ex: {{pages_id.country_code.defaultLanguage}}, {{user_created.language_preference}}, {{organization_id.settings.language_code}})",
         },
       },
       {
@@ -161,7 +161,7 @@ export default defineDisplay({
             language: "json",
             template: defaultMappingString,
           },
-          note: "Fallback mapping used when a country code is found instead of a complete object with language information",
+          note: "Mécanisme de secours utilisé lorsqu'un code pays est trouvé au lieu d'un objet complet avec les informations de langue. Solution alternative en cas de problèmes d'accès aux données ou de restrictions de permissions.",
         },
         schema: {
           default_value: defaultMappingString,

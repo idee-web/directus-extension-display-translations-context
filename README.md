@@ -22,6 +22,7 @@ Cette extension est particulièrement utile pour les projets multilingues où le
   - [Votre collection exemple Pages](#4-collection-pages)
   - [Votre collection exemple Pages_translations || Pages_Base](#3-collection-pages_base)
   - [Directus setting translation](#5-collection-de-traductions)
+- [Schéma des relations](#schéma-des-relations)
 - [Utilisation](#utilisation)
   - [Cas d'utilisation typique](#cas-dutilisation-typique)
   - [Personnalisation de l'affichage](#personnalisation-de-laffichage)
@@ -48,7 +49,7 @@ npm install
 npm run build
 ```
 
-Ensuite, copiez le dossier `dist` dans le dossier `extensions/displays/translations-context` de votre installation Directus.
+Ensuite, copiez le dossier `dist` dans le dossier `extensions/displays-translations-context` de votre installation Directus.
 
 ### Étapes d'installation
 
@@ -67,13 +68,32 @@ votre-projet-directus/
 
 2. Copiez le fichier `dist/index.js` généré par le build dans le dossier `extensions/display-translations-context/dist/`
 3. Copiez également le fichier `package.json` dans le même dossier
-4. Redémarrez votre conteneur Directus pour que l'extension soit détectée
+
+### Docker Container / Coolify
+
+```
+services:
+   directus:
+      image: 'directus/directus:11.5.1'
+      volumes:
+         - 'uploads:/directus/uploads'
+         - 'extensions:/directus/extensions'
+         - 'templates:/directus/templates'
+         - '/opt/directus/extensions/display-translations-context/package.json:/directus/extensions/display-translations-context/package.json:ro'
+         - '/opt/directus/extensions/display-translations-context/dist/index.js:/directus/extensions/display-translations-context/dist/index.js:ro'
+      environment:
+         - EXTENSIONS_AUTO_RELOAD=true # si Environnement de développement
+```
+
+1. Redémarrez votre conteneur Directus pour que l'extension soit détectée
 
 Cette structure est conforme à la façon dont Directus recherche les extensions dans un environnement Docker.
 
 ### Arborescence des dossiers
 
 #### Environnement de développement
+
+Environnement : EXTENSIONS_AUTO_RELOAD=true
 
 ```
 directus-extension-display-translations-context/
@@ -134,6 +154,41 @@ Lors de la configuration de l'extension dans l'interface Directus, vous disposez
    - Peut être un code de langue direct (ex: `fr-FR`)
    - Ou un chemin dynamique (ex: `{{pages_id.country_code.defaultLanguage}}`)
 
+   **Sélection flexible de la source de langue**
+
+   Cette option permet de définir d'où provient le code de langue à utiliser pour l'affichage. Elle offre une grande flexibilité :
+
+   1. **Code statique** : Utilisez directement un code de langue (ex: `fr-FR`, `en-US`)
+   2. **Chemin dynamique** : Spécifiez un chemin vers n'importe quelle collection liée qui contient un code de langue
+
+   **Sources de langue possibles**
+
+   Le sélecteur peut pointer vers différentes collections, pas uniquement la collection Countries :
+
+   - **Collection Countries** : `{{pages_id.country_code.defaultLanguage}}`
+   - **Collection Users** : `{{user_created.language_preference}}`
+   - **Collection Settings** : `{{site_settings.default_language}}`
+   - **Collection Regions** : `{{region_id.main_language}}`
+   - **Collection Organizations** : `{{organization_id.preferred_language}}`
+
+   **Format du chemin**
+
+   Le format du chemin suit toujours la structure : `{{collection.field.language_field}}` où :
+
+   - `collection` est le nom du champ de relation dans votre collection actuelle
+   - `field` est le champ dans la collection liée qui contient la référence à la langue
+   - `language_field` est le champ contenant le code de langue
+
+   **Exemple concret**
+
+   Si vous avez une collection `pages` avec une relation vers `organizations` qui a une préférence de langue :
+
+   ```
+   {{organization_id.settings.language_code}}
+   ```
+
+   Cela indique à l'extension de chercher le code de langue dans le champ `language_code` du sous-objet `settings` de l'organisation liée à la page.
+
 4. **Country to Language Mapping (mappingDTC)**
 
    ![Option Country Mapping](docs/screenshots/directus-extension-display-translations-context-country-mapping.png)
@@ -141,6 +196,52 @@ Lors de la configuration de l'extension dans l'interface Directus, vous disposez
    - Mapping JSON pour convertir les codes pays en codes de langue
    - Utile lorsque le sélecteur renvoie un code pays au lieu d'un code de langue
    - Exemple : `{"FR": "fr-FR", "DE": "de-DE", ...}`
+
+   **Mécanisme de secours et solution alternative**
+
+   Cette fonctionnalité sert de mécanisme de secours dans les situations suivantes :
+
+   1. **Problèmes d'accès aux données** : Lorsque l'extension ne peut pas accéder directement à l'objet langue complet (par exemple, en raison de restrictions de permissions)
+   2. **Structure de données simplifiée** : Quand la relation pays-langue est stockée uniquement sous forme de code pays (chaîne de caractères) au lieu d'un objet complet
+   3. **Erreurs API** : Pour éviter les erreurs 403 lors de la tentative d'accès à des collections liées
+
+   **Exemple de configuration avancée**
+
+   ```json
+   {
+     "FR": "fr-FR",
+     "BE": "fr-BE",
+     "CH": "fr-CH",
+     "CA": "fr-CA",
+     "DE": "de-DE",
+     "AT": "de-AT",
+     "IT": "it-IT",
+     "ES": "es-ES",
+     "US": "en-US",
+     "GB": "en-GB",
+     "UK": "en-GB",
+     "AU": "en-AU"
+   }
+   ```
+
+   **Processus de résolution**
+
+   L'extension suit un processus en plusieurs étapes pour déterminer le code de langue :
+
+   1. Tente d'abord d'accéder directement au champ de langue via le chemin spécifié
+   2. Si cela échoue, utilise le mapping pays-langue configuré
+   3. Si le pays n'est pas dans le mapping, tente d'utiliser le code pays directement comme code de langue
+   4. En dernier recours, affiche un message d'erreur
+
+   **Cas d'utilisation typique**
+
+   Imaginons une structure où les pages sont liées à des pays, mais où l'accès direct à la relation pays-langue est limité :
+
+   ```
+   Page → Country (code: "FR") → Language (code: "fr-FR")
+   ```
+
+   Avec le mapping, l'extension peut convertir "FR" en "fr-FR" sans avoir besoin d'accéder directement à l'objet Language.
 
 5. **Show Language Menu (menuDTC)**
 
@@ -214,6 +315,54 @@ Cette collection stocke les traductions pour chaque élément traduisible.
 - `languages_code` : Relation vers une langue
 - `title`, `description`, etc. : Champs contenant le contenu traduit
 
+## Schéma des relations
+
+Le diagramme suivant illustre les relations entre les différentes collections nécessaires pour le fonctionnement de l'extension :
+
+```mermaid
+erDiagram
+    Languages ||--o{ Pages_Base : "traduit en"
+    Pages_Base }o--|| Pages : "appartient à"
+    Countries ||--o{ Pages : "associé à"
+    Countries ||--o{ Languages : "langue par défaut"
+
+    Languages {
+        string code "fr-FR, en-US (input)"
+        string name "Français, English (input)"
+        string direction "LTR, RTL (select)"
+        boolean default "langue par défaut (boolean)"
+    }
+
+    Countries {
+        string code "FR, US (input)"
+        string name "France, United States (input)"
+        relation defaultLanguage "fr-FR, en-US (m2o → Languages)"
+    }
+
+    Pages {
+        string id "identifiant unique (primary)"
+        string status "publié, brouillon (select)"
+        relation translations "traductions (translations → Pages_Base)"
+        relation country_code "pays associé (m2o → Countries)"
+    }
+
+    Pages_Base {
+        string id "identifiant unique (primary)"
+        relation pages_id "page parente (m2o → Pages)"
+        relation languages_code "langue (m2o → Languages)"
+        string title "titre traduit (input)"
+        string description "description traduite (textarea)"
+    }
+
+    SystemTranslations {
+        string key "TABLE_TITLE (input)"
+        string language "fr-FR, en-US (input)"
+        string value "Titre, Title (input)"
+    }
+```
+
+Ce schéma montre comment les collections sont interconnectées et les types de champs utilisés dans chaque collection. Les relations entre les collections sont essentielles pour le fonctionnement de l'extension, notamment pour la sélection dynamique de langue.
+
 ## Utilisation
 
 ### Cas d'utilisation typique
@@ -254,6 +403,18 @@ Default Language Selector: {{pages_id.country_code.defaultLanguage}}
 Country to Language Mapping: {"FR": "fr-FR", "DE": "de-DE", "US": "en-US"}
 Show Language Menu: true
 ```
+
+#### Affichage de prix de produits par pays
+
+```
+Display Field: {{price}} {{currency_symbol}}
+Language Field: country_code
+Default Language Selector: {{product_id.target_market}}
+Country to Language Mapping: {"FR": "EUR", "DE": "EUR", "US": "USD", "GB": "GBP", "JP": "JPY"}
+Show Language Menu: true
+```
+
+Cette configuration permet d'afficher automatiquement le prix d'un produit dans la devise correspondant au marché cible du produit. Par exemple, si le produit a comme marché cible "US", l'extension affichera le prix en USD. Le mapping ici convertit les codes pays en codes de devise plutôt qu'en codes de langue.
 
 ## Fonctionnement technique
 

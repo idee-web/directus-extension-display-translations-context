@@ -12,37 +12,37 @@ erDiagram
     Countries ||--o{ Languages : "langue par défaut"
 
     Languages {
-        string code "fr-FR, en-US"
-        string name "Français, English"
-        string direction "LTR, RTL"
-        boolean default "langue par défaut"
+        string code "fr-FR, en-US (input)"
+        string name "Français, English (input)"
+        string direction "LTR, RTL (select)"
+        boolean default "langue par défaut (boolean)"
     }
 
     Countries {
-        string code "FR, US"
-        string name "France, United States"
-        string defaultLanguage "fr-FR, en-US"
+        string code "FR, US (input)"
+        string name "France, United States (input)"
+        relation defaultLanguage "fr-FR, en-US (m2o → Languages)"
     }
 
     Pages {
-        string id "identifiant unique"
-        string status "publié, brouillon"
-        relation base "traductions"
-        relation country_code "pays associé"
+        string id "identifiant unique (primary)"
+        string status "publié, brouillon (select)"
+        relation translations "traductions (translations → Pages_Base)"
+        relation country_code "pays associé (m2o → Countries)"
     }
 
     Pages_Base {
-        string id "identifiant unique"
-        relation pages_id "page parente"
-        relation languages_code "langue"
-        string title "titre traduit"
-        string description "description traduite"
+        string id "identifiant unique (primary)"
+        relation pages_id "page parente (m2o → Pages)"
+        relation languages_code "langue (m2o → Languages)"
+        string title "titre traduit (input)"
+        string description "description traduite (textarea)"
     }
 
     SystemTranslations {
-        string key "TABLE_TITLE"
-        string language "fr-FR, en-US"
-        string value "Titre, Title"
+        string key "TABLE_TITLE (input)"
+        string language "fr-FR, en-US (input)"
+        string value "Titre, Title (input)"
     }
 ```
 
