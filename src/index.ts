@@ -135,7 +135,7 @@ export default defineDisplay({
           options: {
             placeholder: "languages_code",
           },
-          note: "Field containing the language code (with or without {{ }})",
+          note: "Champ dans la collection de traductions contenant le code de langue. Peut être un chemin direct (ex: language_code) ou imbriqué (ex: languages_code.code) pour les relations M2O.",
         },
       },
       {

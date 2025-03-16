@@ -142,9 +142,58 @@ Lors de la configuration de l'extension dans l'interface Directus, vous disposez
 
    ![Option Language Field](docs/screenshots/directus-extension-display-translations-context-languages-field.png)
 
-   - Champ contenant le code de langue dans les traductions
+   - Champ contenant le code de langue dans la collection de traductions (ex: Pages_Base)
    - Valeur par défaut : `language_code`
    - Peut être un chemin imbriqué comme `languages_code.code`
+
+   **Fonctionnement technique**
+
+   Cette option définit comment l'extension identifie le code de langue dans chaque élément de la collection de traductions (comme Pages_Base). Contrairement à ce qui pourrait être compris, ce champ ne fait référence qu'à la structure de la collection de traductions, et non à d'autres collections.
+
+   Le code traite deux cas principaux :
+
+   1. **Champ direct** : Si vous spécifiez un nom de champ simple (ex: `language_code`), l'extension cherchera directement cette propriété dans l'objet de traduction.
+
+      ```
+      // Élément de Pages_Base
+      {
+        "id": 1,
+        "language_code": "fr-FR",  // ← Accès direct
+        "title": "Bonjour"
+      }
+      ```
+
+   2. **Chemin imbriqué** : Si vous spécifiez un chemin avec un point (ex: `languages_code.code`), l'extension suivra ce chemin pour trouver le code de langue :
+
+      ```
+      // Élément de Pages_Base
+      {
+        "id": 1,
+        "languages_code": {  // ← Premier niveau (relation M2O vers Languages)
+          "code": "fr-FR",   // ← Deuxième niveau
+          "name": "Français"
+        },
+        "title": "Bonjour"
+      }
+      ```
+
+   **Gestion intelligente des types**
+
+   L'extension gère intelligemment différents types de valeurs dans la collection de traductions :
+
+   - Si le premier niveau est une chaîne de caractères, elle est utilisée directement comme code de langue
+   - Si le premier niveau est un objet (relation M2O), l'extension accède à la propriété spécifiée après le point
+   - Si aucune valeur n'est trouvée, l'extension utilise des mécanismes de secours pour éviter les erreurs
+
+   **Exemple concret avec Pages_Base**
+
+   Dans une structure où Pages_Base contient une relation M2O vers la collection Languages :
+
+   ```
+   fieldDTC: "languages_code.code"
+   ```
+
+   Cela indique à l'extension de chercher d'abord l'objet `languages_code` dans chaque élément de Pages_Base, puis d'utiliser la propriété `code` de cet objet comme code de langue.
 
 3. **Default Language Selector (selectorDTC)**
 
@@ -327,27 +376,27 @@ erDiagram
     Countries ||--o{ Languages : "langue par défaut"
 
     Languages {
-        string code "fr-FR, en-US (input)"
+        string code "fr-FR, en-US (input primary)"
         string name "Français, English (input)"
         string direction "LTR, RTL (select)"
         boolean default "langue par défaut (boolean)"
     }
 
     Countries {
-        string code "FR, US (input)"
+        string code "FR, US (input primary)"
         string name "France, United States (input)"
         relation defaultLanguage "fr-FR, en-US (m2o → Languages)"
     }
 
     Pages {
-        string id "identifiant unique (primary)"
+        string id "identifiant unique (input primary)"
         string status "publié, brouillon (select)"
         relation translations "traductions (translations → Pages_Base)"
         relation country_code "pays associé (m2o → Countries)"
     }
 
     Pages_Base {
-        string id "identifiant unique (primary)"
+        string id "identifiant unique (input primary)"
         relation pages_id "page parente (m2o → Pages)"
         relation languages_code "langue (m2o → Languages)"
         string title "titre traduit (input)"
@@ -377,9 +426,13 @@ Ce schéma montre comment les collections sont interconnectées et les types de 
 
 Vous pouvez personnaliser l'affichage des colonnes dans l'interface Directus :
 
-![Modification du nom de colonne](docs/screenshots/directus-extension-display-translations-context-change-column-name.png)
+![Modification du nom de colonne base](docs/screenshots/directus-extension-display-translations-context-change-column-name.png)
 
 Ce qui donne un résultat comme celui-ci :
+
+![Modification du nom de colonne base en title](docs/screenshots/directus-extension-display-translations-context-change-column-name-base_to_title.png)
+
+Les parametres a mettre sur le champs "base" de type translations:
 
 ![Nom de colonne personnalisé](docs/screenshots/directus-extension-display-translations-context-column-name.png)
 
