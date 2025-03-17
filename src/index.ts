@@ -9,7 +9,7 @@
  * - Interactive language selection menu
  * - Support for nested language fields
  *
- * @author Alexandre Lapoux <contact@idee-web.com>
+ * @author Alexandre Lapoux
  * @copyright 2025 IDEE-WEB
  * @license MIT
  * @website https://www.idee-web.com
