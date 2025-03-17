@@ -10,7 +10,7 @@ Features:
 - Fallback mechanisms for missing translations
 
 @author Alexandre Lapoux
-@copyright 2025 IDEE-WEB
+@copyright 2025 IDEE-WEB.
 @license MIT
 @website https://www.idee-web.com
 -->
