@@ -2,7 +2,7 @@
     "name": "directus-extension-display-translations-context",
     "description": "An optimized display extension for multilingual content in Directus with advanced language selection and country mapping",
     "icon": "translate",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "keywords": [
         "directus",
         "directus-extension",
