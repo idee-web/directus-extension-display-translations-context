@@ -1,5 +1,10 @@
 ![Demonstration of the extension](docs/screenshots/directus-extension-display-translations-context-table.png)
 
+[![npm version](https://img.shields.io/npm/v/directus-extension-display-translations-context.svg)](https://www.npmjs.com/package/directus-extension-display-translations-context)
+[![License](https://img.shields.io/github/license/idee-web/directus-extension-display-translations-context)](https://github.com/idee-web/directus-extension-display-translations-context/blob/main/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/idee-web/directus-extension-display-translations-context)](https://github.com/idee-web/directus-extension-display-translations-context/issues)
+[![Directus 11.5.1](https://img.shields.io/badge/Directus-11.5.1-blue)](https://directus.io/)
+
 # Directus Display Translations Context
 
 The "Directus Translations Context Display" extension is an optimized display extension for multilingual content in Directus. It automatically displays translated content in the Directus administration interface based on advanced language selection criteria.
