@@ -1,4 +1,4 @@
-![Demonstration of the extension](docs/screenshots/directus-extension-display-translations-context-table.png)
+![Demonstration of the extension](https://github.com/idee-web/directus-extension-display-translations-context/raw/main/docs/screenshots/directus-extension-display-translations-context-table.png)
 
 [![npm version](https://img.shields.io/npm/v/directus-extension-display-translations-context.svg)](https://www.npmjs.com/package/directus-extension-display-translations-context)
 [![License](https://img.shields.io/github/license/idee-web/directus-extension-display-translations-context)](https://github.com/idee-web/directus-extension-display-translations-context/blob/main/LICENSE)
@@ -11,7 +11,7 @@ The "Directus Translations Context Display" extension is an optimized display ex
 
 This extension is particularly useful for multilingual projects where content is translated into multiple languages and you want to automatically display the translation corresponding to a specific country or language from another collection.
 
-![Installed extension](docs/screenshots/directus-extension-display-translations-context-extensions.png)
+![Installed extension](https://github.com/idee-web/directus-extension-display-translations-context/raw/main/docs/screenshots/directus-extension-display-translations-context-extensions.png)
 
 ## Table of Contents
 
@@ -118,13 +118,13 @@ directus-extension-display-translations-context/
 
 When configuring the extension in the Directus interface, you have the following options:
 
-![Complete configuration interface](docs/screenshots/directus-extension-display-translations-context-parameters.png)
+![Complete configuration interface](https://github.com/idee-web/directus-extension-display-translations-context/raw/main/docs/screenshots/directus-extension-display-translations-context-parameters.png)
 
 ### Main Options
 
 1. **Display Field (templateDTC)**
 
-   ![Display Field Option](docs/screenshots/directus-extension-display-translations-context-display-field.png)
+   ![Display Field Option](https://github.com/idee-web/directus-extension-display-translations-context/raw/main/docs/screenshots/directus-extension-display-translations-context-display-field.png)
 
    - Display format for translations
    - Supports field variables with the syntax `{{field}}`
@@ -135,17 +135,17 @@ When configuring the extension in the Directus interface, you have the following
 
    You can use the syntax `[[TABLE_TITLE]]→{{title}}` to display the translated field name followed by the content:
 
-   ![Configuration with system translations](docs/screenshots/directus-extension-display-translations-context-system-translations-params.png)
+   ![Configuration with system translations](https://github.com/idee-web/directus-extension-display-translations-context/raw/main/docs/screenshots/directus-extension-display-translations-context-system-translations-params.png)
 
    Which gives a result like this in the interface:
 
-   ![Result with system translations](docs/screenshots/directus-extension-display-translations-context-system-translations.png)
+   ![Result with system translations](https://github.com/idee-web/directus-extension-display-translations-context/raw/main/docs/screenshots/directus-extension-display-translations-context-system-translations.png)
 
    This configuration displays the field name in the corresponding language (Title, Titre, Titolo, etc.) followed by the translated content, creating a fully localized interface.
 
 2. **Language Field (fieldDTC)**
 
-   ![Language Field Option](docs/screenshots/directus-extension-display-translations-context-languages-field.png)
+   ![Language Field Option](https://github.com/idee-web/directus-extension-display-translations-context/raw/main/docs/screenshots/directus-extension-display-translations-context-languages-field.png)
 
    - Field containing the language code in the translations collection (e.g., Pages_Base)
    - Default value: `language_code`
@@ -202,7 +202,7 @@ When configuring the extension in the Directus interface, you have the following
 
 3. **Default Language Selector (selectorDTC)**
 
-   ![Default Language Selector Option](docs/screenshots/directus-extension-display-translations-context-default-language-selector.png)
+   ![Default Language Selector Option](https://github.com/idee-web/directus-extension-display-translations-context/raw/main/docs/screenshots/directus-extension-display-translations-context-default-language-selector.png)
 
    - Static or dynamic language selector
    - Can be a direct language code (e.g., `fr-FR`)
@@ -245,7 +245,7 @@ When configuring the extension in the Directus interface, you have the following
 
 4. **Country to Language Mapping (mappingDTC)**
 
-   ![Country Mapping Option](docs/screenshots/directus-extension-display-translations-context-country-mapping.png)
+   ![Country Mapping Option](https://github.com/idee-web/directus-extension-display-translations-context/raw/main/docs/screenshots/directus-extension-display-translations-context-country-mapping.png)
 
    - JSON mapping to convert country codes to language codes
    - Useful when the selector returns a country code instead of a language code
@@ -299,7 +299,7 @@ When configuring the extension in the Directus interface, you have the following
 
 5. **Show Language Menu (menuDTC)**
 
-   ![Show Menu Option](docs/screenshots/directus-extension-display-translations-context-show-menu.png)
+   ![Show Menu Option](https://github.com/idee-web/directus-extension-display-translations-context/raw/main/docs/screenshots/directus-extension-display-translations-context-show-menu.png)
 
    - Enables/disables the language selection menu
    - Allows users to see all available translations
@@ -312,7 +312,7 @@ To fully use this extension, you need to configure the following collections in 
 
 This collection stores the languages available in your system.
 
-![Languages collection](docs/screenshots/directus-extension-display-translations-context-language-collection.png)
+![Languages collection](https://github.com/idee-web/directus-extension-display-translations-context/raw/main/docs/screenshots/directus-extension-display-translations-context-language-collection.png)
 
 **Recommended fields:**
 
@@ -321,13 +321,13 @@ This collection stores the languages available in your system.
 - `direction`: Writing direction (select)
 - `active`: Activation status (boolean)
 
-![Fields of the languages collection](docs/screenshots/directus-extension-display-translations-context-languages-collection-fields.png)
+![Fields of the languages collection](https://github.com/idee-web/directus-extension-display-translations-context/raw/main/docs/screenshots/directus-extension-display-translations-context-languages-collection-fields.png)
 
 ### 2. Countries Collection
 
 This collection stores countries and their regional settings.
 
-![Countries collection](docs/screenshots/directus-extension-display-translations-context-country-collection.png)
+![Countries collection](https://github.com/idee-web/directus-extension-display-translations-context/raw/main/docs/screenshots/directus-extension-display-translations-context-country-collection.png)
 
 **Recommended fields:**
 
@@ -335,13 +335,13 @@ This collection stores countries and their regional settings.
 - `name`: Country name (input)
 - `defaultLanguage`: Relation to the default language for this country (m2o → Languages)
 
-![Fields of the countries collection](docs/screenshots/directus-extension-display-translations-context-countries-collection-fields.png)
+![Fields of the countries collection](https://github.com/idee-web/directus-extension-display-translations-context/raw/main/docs/screenshots/directus-extension-display-translations-context-countries-collection-fields.png)
 
 ### 3. Pages Collection
 
 This collection contains pages with their translations.
 
-![Pages collection](docs/screenshots/directus-extension-display-translations-context-pages-collection-fields.png)
+![Pages collection](https://github.com/idee-web/directus-extension-display-translations-context/raw/main/docs/screenshots/directus-extension-display-translations-context-pages-collection-fields.png)
 
 **Recommended fields:**
 
@@ -354,7 +354,7 @@ This collection contains pages with their translations.
 
 This collection serves as a template for translatable pages.
 
-![Fields of the pages_base collection](docs/screenshots/directus-extension-display-translations-context-pages_base-collection-fields.png)
+![Fields of the pages_base collection](https://github.com/idee-web/directus-extension-display-translations-context/raw/main/docs/screenshots/directus-extension-display-translations-context-pages_base-collection-fields.png)
 
 **Recommended fields:**
 
@@ -368,7 +368,7 @@ This collection serves as a template for translatable pages.
 
 This collection stores translations for each translatable item.
 
-![Translations collection](docs/screenshots/directus-extension-display-translations-context-translations-collection.png)
+![Translations collection](https://github.com/idee-web/directus-extension-display-translations-context/raw/main/docs/screenshots/directus-extension-display-translations-context-translations-collection.png)
 
 **Recommended fields:**
 
@@ -434,15 +434,15 @@ This schema shows how the collections are interconnected and the types of fields
 
 You can customize the display of columns in the Directus interface:
 
-![Modifying the base column name](docs/screenshots/directus-extension-display-translations-context-change-column-name.png)
+![Modifying the base column name](https://github.com/idee-web/directus-extension-display-translations-context/raw/main/docs/screenshots/directus-extension-display-translations-context-change-column-name.png)
 
 Which gives a result like this:
 
-![Modifying the base column name to title](docs/screenshots/directus-extension-display-translations-context-change-column-name-base_to_title.png)
+![Modifying the base column name to title](https://github.com/idee-web/directus-extension-display-translations-context/raw/main/docs/screenshots/directus-extension-display-translations-context-change-column-name-base_to_title.png)
 
 Parameters to set on the "base" field of translations type:
 
-![Custom column name](docs/screenshots/directus-extension-display-translations-context-column-name.png)
+![Custom column name](https://github.com/idee-web/directus-extension-display-translations-context/raw/main/docs/screenshots/directus-extension-display-translations-context-column-name.png)
 
 ### Configuration Examples
 
