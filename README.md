@@ -1,6 +1,6 @@
 ![Demonstration of the extension](docs/screenshots/directus-extension-display-translations-context-table.png)
 
-# Directus Display Translations Context
+# Directus Display Translations Context.
 
 ## English
 
