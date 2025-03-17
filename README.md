@@ -1,6 +1,6 @@
 ![Demonstration of the extension](docs/screenshots/directus-extension-display-translations-context-table.png)
 
-# Directus Display Translations Context
+# Directus Display Translations Context...
 
 The "Directus Translations Context Display" extension is a display extension optimized for multilingual content in Directus. It automatically displays translated content in the Directus admin interface based on advanced language selection criteria.
 
